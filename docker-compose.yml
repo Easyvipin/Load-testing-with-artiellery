@@ -1,8 +1,8 @@
-version: '3.3'
+version: "3.3"
 
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql:8
     restart: unless-stopped
     env_file: ./.env
     environment:
@@ -11,7 +11,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - db:/var/lib/mysql
+      - new_db:/var/lib/mysql
       - ./db_dumps:/docker-entrypoint-initdb.d
   api:
     depends_on:
@@ -20,16 +20,18 @@ services:
     restart: unless-stopped
     env_file: ./.env
     ports:
-      - $NODE_PORT:5000
+      - 6001:6000
     environment:
       - DB_HOST=mysqldb
       - DB_USER=$MYSQLDB_USER
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=3306
-      - NODE_PORT=5000
+      - NODE_PORT=6000
     stdin_open: true
     tty: true
 
 volumes:
-  db:
+  new_db:
+
+  
